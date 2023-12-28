@@ -1,5 +1,9 @@
 package com.examenopdracht.onlycats.data
 
-class CatUiState {
-    // TODO add state
+import com.examenopdracht.onlycats.network.CatPhoto
+
+sealed interface CatUiState {
+    data class Success(val photos: List<CatPhoto>) : CatUiState
+    object Error : CatUiState
+    object Loading : CatUiState
 }

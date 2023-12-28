@@ -5,14 +5,18 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.examenopdracht.onlycats.R
+import com.examenopdracht.onlycats.ui.components.CatNavBar
+import com.examenopdracht.onlycats.ui.screens.FavouritesScreen
+import com.examenopdracht.onlycats.ui.screens.HomeScreen
+import com.examenopdracht.onlycats.ui.screens.SettingsScreen
 
 enum class CatScreen(@StringRes val title: Int) {
     Home(title = R.string.home),
@@ -24,13 +28,15 @@ enum class CatScreen(@StringRes val title: Int) {
 @Composable
 fun OnlyCatsApp(
     navController: NavHostController = rememberNavController(),
-    viewModel: CatViewModel = CatViewModel(),
+    viewModel: CatViewModel = viewModel(factory = CatViewModel.Factory),
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val currentScreen = CatScreen.valueOf(
         backStackEntry?.destination?.route ?: CatScreen.Home.name
     )
+
+    val uiState = viewModel.catUiState
 
     Scaffold(
         bottomBar = {
@@ -39,7 +45,6 @@ fun OnlyCatsApp(
             }
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
 
         // TODO remove this
         val koenk = innerPadding
@@ -49,7 +54,7 @@ fun OnlyCatsApp(
             startDestination = CatScreen.Home.name
         ) {
             composable(route = CatScreen.Home.name) {
-                HomeScreen()
+                HomeScreen(uiState)
             }
 
             composable(route = CatScreen.Favourites.name) {

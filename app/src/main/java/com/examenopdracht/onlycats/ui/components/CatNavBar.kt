@@ -1,4 +1,4 @@
-package com.examenopdracht.onlycats.ui
+package com.examenopdracht.onlycats.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import com.examenopdracht.onlycats.ui.CatScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

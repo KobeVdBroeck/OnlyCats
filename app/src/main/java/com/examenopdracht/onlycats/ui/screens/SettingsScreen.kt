@@ -1,9 +1,9 @@
-package com.examenopdracht.onlycats.ui
+package com.examenopdracht.onlycats.ui.screens
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun HomeScreen() {
-    Text("Home")
+fun SettingsScreen() {
+    Text("Settings")
 }
