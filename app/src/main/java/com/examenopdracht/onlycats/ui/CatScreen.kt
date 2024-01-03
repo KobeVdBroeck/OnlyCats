@@ -28,15 +28,13 @@ enum class CatScreen(@StringRes val title: Int) {
 @Composable
 fun OnlyCatsApp(
     navController: NavHostController = rememberNavController(),
-    viewModel: CatViewModel = viewModel(factory = CatViewModel.Factory),
+    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val currentScreen = CatScreen.valueOf(
         backStackEntry?.destination?.route ?: CatScreen.Home.name
     )
-
-    val uiState = viewModel.catUiState
 
     Scaffold(
         bottomBar = {
@@ -54,11 +52,11 @@ fun OnlyCatsApp(
             startDestination = CatScreen.Home.name
         ) {
             composable(route = CatScreen.Home.name) {
-                HomeScreen(uiState)
+                HomeScreen(viewModel.networkUiState)
             }
 
             composable(route = CatScreen.Favourites.name) {
-                FavouritesScreen()
+                FavouritesScreen(viewModel.localUiState)
             }
 
             composable(route = CatScreen.Settings.name) {

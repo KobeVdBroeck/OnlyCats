@@ -11,16 +11,22 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.examenopdracht.onlycats.network.CatPhoto
 
 @Composable
 fun CatCard(cat: CatPhoto) {
     Card() {
         AsyncImage(
-            model = cat.url,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(cat.url)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
+            modifier = Modifier.fillMaxWidth(),
         )
         Row(horizontalArrangement = Arrangement.SpaceAround,
             modifier = Modifier.fillMaxWidth().padding(8.dp)) {
@@ -38,5 +44,5 @@ fun CatCard(cat: CatPhoto) {
             }
         }
     }
-
 }
+
