@@ -1,6 +1,7 @@
 package com.examenopdracht.onlycats.data
 
 import android.content.Context
+import com.examenopdracht.onlycats.data.api.NetworkCatPhotosRepository
 import com.examenopdracht.onlycats.data.db.CatDatabase
 import com.examenopdracht.onlycats.data.db.OfflineCatPhotosRepository
 import com.examenopdracht.onlycats.network.CatApiService

@@ -1,4 +1,4 @@
-package com.examenopdracht.onlycats.ui
+package com.examenopdracht.onlycats.model
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -17,17 +17,18 @@ import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.request.ImageRequest
 import com.examenopdracht.onlycats.data.CatPhotosRepository
-import com.examenopdracht.onlycats.data.LocalUiState
-import com.examenopdracht.onlycats.data.NetworkUiState
+import com.examenopdracht.onlycats.data.api.NetworkUiState
+import com.examenopdracht.onlycats.data.db.LocalUiState
 import com.examenopdracht.onlycats.network.CatPhoto
-import com.examenopdracht.onlycats.ui.components.CatPhotoProvider
+import com.examenopdracht.onlycats.ui.OnlyCatsApplication
+import com.examenopdracht.onlycats.ui.components.CatImageProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 
 class HomeViewModel(private val apiRepository: CatPhotosRepository, private val roomRepository: CatPhotosRepository, private val context: Context) : ViewModel() {
 
-    private var networkImageProvider: CatPhotoProvider = CatPhotoProvider(5) { viewModelScope.launch { getNewImage() } }
+    private var networkImageProvider: CatImageProvider = CatImageProvider(5) { viewModelScope.launch { getNewPhotos() } }
     private var localImages: List<CatPhoto> = listOf()
 
     var networkUiState: MutableStateFlow<NetworkUiState> = MutableStateFlow(NetworkUiState.Loading)
@@ -40,46 +41,27 @@ class HomeViewModel(private val apiRepository: CatPhotosRepository, private val 
 
     init {
         viewModelScope.launch {
-            getInitialPhotos()
+            getNewPhotos()
+            getNewPhotos()
             getFavourites()
         }
-
     }
 
-    private suspend fun getInitialPhotos() {
+    private suspend fun getNewPhotos() {
         networkUiState.value = NetworkUiState.Loading
 
         try {
             val photos = apiRepository.getCatPhotos(5)
 
             photos.forEach {
-                networkImageProvider.addPhoto(it)
                     it.photo = convertToBitmap(Uri.parse(it.url), context, it.width, it.height)
                     it.onImageLoaded()
                     it.save = { savePhoto(it) }
                     it.unsave = { deletePhoto(it) }
-                    networkUiState.value = NetworkUiState.Success(networkImageProvider)
-
             }
 
-        } catch(ex: Exception) {
-            networkUiState.value = NetworkUiState.Error
-            ex.printStackTrace()
-        }
-    }
-
-    private suspend fun getNewImage() {
-        networkUiState.value = NetworkUiState.Loading
-
-        try {
-            val photo = apiRepository.getCatPhotos(1)[1]
-            networkImageProvider.addPhoto(photo)
-
-                photo.photo = convertToBitmap(Uri.parse(photo.url), context, photo.width, photo.height)
-                photo.onImageLoaded()
-                photo.save = { savePhoto(photo) }
-                photo.unsave = { deletePhoto(photo) }
-                networkUiState.value = NetworkUiState.Success(networkImageProvider)
+            networkImageProvider.addNewPhotos(photos)
+            networkUiState.value = NetworkUiState.Success(networkImageProvider)
 
         } catch(ex: Exception) {
             networkUiState.value = NetworkUiState.Error

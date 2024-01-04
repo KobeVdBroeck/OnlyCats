@@ -1,4 +1,4 @@
-package com.examenopdracht.onlycats.data
+package com.examenopdracht.onlycats.data.db
 
 import com.examenopdracht.onlycats.network.CatPhoto
 
