@@ -18,10 +18,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -34,16 +32,15 @@ import androidx.compose.ui.unit.dp
 import com.examenopdracht.onlycats.data.db.LocalUiState
 import com.examenopdracht.onlycats.network.CatPhoto
 import com.examenopdracht.onlycats.ui.components.CatView
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun FavouritesScreen(
-    state: MutableStateFlow<LocalUiState>,
+    state: LocalUiState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
-    when (val state = state.value) {
+    when (state) {
         is LocalUiState.Success -> FavouritesScreen(state.photos, windowSizeClass)
         is LocalUiState.Loading -> LoadingScreen()
         is LocalUiState.Error -> ErrorScreen()
@@ -52,33 +49,35 @@ fun FavouritesScreen(
 
 @Composable
 fun FavouritesScreen(photos: List<CatPhoto>, windowSizeClass: WindowSizeClass) {
-    var selectedImage by remember { mutableStateOf(CatPhoto.Empty()) }
+    var selectedImage = remember { mutableStateOf(CatPhoto.Empty()) }
     val width = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx().toInt()}
     val context = LocalContext.current
 
+    // TODO download on hold?
+
     fun handleTap(offset: Offset) {
         if(offset.x < width / 5 || offset.x > width * 4 / 5)
-            selectedImage = CatPhoto.Empty()
+            selectedImage.value = CatPhoto.Empty()
     }
 
     fun handleDoubleTap(offset: Offset) {
         if(offset.x < width / 5 || offset.x > width * 4 / 5)
             return
 
-        println(selectedImage.isSaved)
+        println(selectedImage.value.isSaved)
 
-        if(selectedImage.isSaved) {
-            selectedImage.unsave()
+        if(selectedImage.value.isSaved) {
+            selectedImage.value.unsave()
             Toast.makeText(context, "Image removed from favourites.", Toast.LENGTH_SHORT).show()
         }
         else {
-            selectedImage.save()
+            selectedImage.value.save()
             Toast.makeText(context, "Image added to favourites.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    if(selectedImage.url == "") {
-        ImageGrid(photos = photos, onImageClick = { image -> selectedImage = image })
+    if(selectedImage.value.url == "") {
+        ImageGrid(photos = photos, onImageClick = { image -> selectedImage.value = image })
     }
     else {
         Box(

@@ -43,9 +43,16 @@ class CatImageProvider(limit: Int, var onListsSwapped: () -> Unit) {
     }
 
     fun addNewPhotos(list: List<CatPhoto>) {
-        var listToAddTo =
-            if (photos1.isEmpty()) photos1 else
-            if (currentPhotos == photos1) photos2 else photos1
+        var listToAddTo: List<CatPhoto>
+
+        if (photos1.isEmpty()) {
+            listToAddTo = photos1
+            if(selectedPhoto.value.url.isEmpty())
+                selectedPhoto.value = list.first()
+        }
+        else {
+            listToAddTo = if (currentPhotos == photos1) photos2 else photos1
+        }
 
         listToAddTo.clear()
         listToAddTo.addAll(list)

@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 
-
 @Serializable
 @Entity(tableName = "cats")
 data class CatPhoto (
@@ -50,6 +49,15 @@ data class CatPhoto (
     @Transient
     @Ignore
     var unsave: () -> Unit = { }
+
+    override fun equals(other: Any?): Boolean {
+        if(other == null || other::class.simpleName != CatPhoto::class.simpleName)
+            return false
+
+        var otherPhoto = other as CatPhoto
+
+        return this.url.equals(other.url) && (this.image == null) == (other.image == null)
+    }
 
     companion object Factory {
         fun Empty(): CatPhoto {

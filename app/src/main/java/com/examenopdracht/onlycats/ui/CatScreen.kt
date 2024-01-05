@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -47,6 +48,8 @@ fun OnlyCatsApp(
 
         // TODO remove this
         val koenk = innerPadding
+        val networkUiState by viewModel.networkUiState.collectAsState()
+        val localUiState by viewModel.localUiState.collectAsState()
 
         NavComponent(currentScreen, { page -> GoToPage(navController, currentScreen, page) }, windowSizeClass)
 
@@ -56,11 +59,11 @@ fun OnlyCatsApp(
             modifier = Modifier.padding(start = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) 0.dp else 85.dp,
                                         bottom = if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) 0.dp else 85.dp)) {
             composable(route = CatScreen.Home.name) {
-                HomeScreen(viewModel.networkUiState, windowSizeClass)
+                HomeScreen(networkUiState, windowSizeClass)
             }
 
             composable(route = CatScreen.Favourites.name) {
-                FavouritesScreen(viewModel.localUiState, windowSizeClass)
+                FavouritesScreen(localUiState, windowSizeClass)
             }
 
             composable(route = CatScreen.Settings.name) {

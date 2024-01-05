@@ -56,8 +56,9 @@ public class ImageConverter {
             bitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.JPEG, currentQuality, outputStream)
 
             currentBytes = outputStream.size()
-            println(currentBytes)
-            currentQuality -= 20
+
+            // Decrease quality by 40%
+            currentQuality = (currentQuality * 0.6).toInt()
 
             if(currentQuality <= 0)
                 throw Exception("Could not save image")

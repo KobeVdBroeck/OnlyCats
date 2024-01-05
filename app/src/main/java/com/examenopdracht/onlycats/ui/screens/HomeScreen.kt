@@ -11,10 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,7 +32,6 @@ import com.examenopdracht.onlycats.data.api.NetworkUiState
 import com.examenopdracht.onlycats.network.CatPhoto
 import com.examenopdracht.onlycats.ui.components.CatImageProvider
 import com.examenopdracht.onlycats.ui.components.CatView
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -39,13 +39,13 @@ import kotlinx.coroutines.runBlocking
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomeScreen (
-    catUiState: MutableStateFlow<NetworkUiState>,
+    catUiState: NetworkUiState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
-    when (val state = catUiState.value) {
+    when (catUiState) {
         is NetworkUiState.Success -> ResultScreen(
-            state.imageProvider, windowSizeClass
+            catUiState.imageProvider, catUiState.imageProvider.selectedPhoto, windowSizeClass
         )
         is NetworkUiState.Loading -> LoadingScreen()
 
@@ -53,18 +53,13 @@ fun HomeScreen (
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ResultScreen(imageProvider: CatImageProvider, windowSizeClass: WindowSizeClass) {
+fun ResultScreen(imageProvider: CatImageProvider, curImage: MutableState<CatPhoto> = imageProvider.selectedPhoto, windowSizeClass: WindowSizeClass) {
         val width = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx().toInt() }
         val context = LocalContext.current
         val curPage = remember { mutableIntStateOf(0) }
-        val curImage = imageProvider.selectedPhoto
 
         fun handleTap(offset: Offset) {
-            if(curImage == null)
-                return
-
             if(offset.x < width / 5)
                 imageProvider.getPrevious()
             if(offset.x > width * 4 / 5)
@@ -89,19 +84,24 @@ fun ResultScreen(imageProvider: CatImageProvider, windowSizeClass: WindowSizeCla
         }
 
         Box() {
-            Text("Welcome to OnlyCats!", fontSize = TextUnit(10f, TextUnitType.Em), textAlign = TextAlign.Center, modifier = Modifier.size(500.dp))
+            Text("Welcome to OnlyCats!",
+                fontSize = TextUnit(10f, TextUnitType.Em),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.size(500.dp)
+                    .padding(start = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) 0.dp else 50.dp))
 
-            CatListView(photo = curImage.value,
+            CatListView(photo = curImage,
                 limit = imageProvider.limit,
                 currentPage = curPage.value,
                 onTap = { offset -> handleTap(offset) },
-                onDoubleTap = { offset -> handleDoubleTap(offset) },)
+                onDoubleTap = { offset -> handleDoubleTap(offset) },
+                windowSizeClass = windowSizeClass)
         }
     }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CatListView(photo: CatPhoto, limit: Int, currentPage: Int, onTap: (Offset) -> Unit, onDoubleTap: (Offset) -> Unit) {
+fun CatListView(photo: MutableState<CatPhoto>, limit: Int, currentPage: Int, onTap: (Offset) -> Unit, onDoubleTap: (Offset) -> Unit, windowSizeClass: WindowSizeClass) {
     val pagerState = rememberPagerState(pageCount = { limit })
 
     if(pagerState.currentPage != currentPage) {
@@ -111,7 +111,7 @@ fun CatListView(photo: CatPhoto, limit: Int, currentPage: Int, onTap: (Offset) -
     }
 
     HorizontalPager(
-        contentPadding = PaddingValues(vertical = 50.dp),
+        contentPadding = PaddingValues(top = 50.dp, bottom = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) 50.dp else 0.dp),
         state = pagerState,
         modifier = Modifier
             .pointerInput(Unit) {
@@ -121,7 +121,6 @@ fun CatListView(photo: CatPhoto, limit: Int, currentPage: Int, onTap: (Offset) -
                 )
             }
             .fillMaxSize()
-            .padding(top = 85.dp)
     ) {
         CatView(photo)
     }

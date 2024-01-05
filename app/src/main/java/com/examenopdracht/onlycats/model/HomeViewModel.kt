@@ -48,8 +48,6 @@ class HomeViewModel(private val apiRepository: CatPhotosRepository, private val 
     }
 
     private suspend fun getNewPhotos() {
-        networkUiState.value = NetworkUiState.Loading
-
         try {
             val photos = apiRepository.getCatPhotos(5)
 
