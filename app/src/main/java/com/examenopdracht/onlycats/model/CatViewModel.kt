@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 
-class HomeViewModel(private val apiRepository: CatPhotosRepository, private val roomRepository: CatPhotosRepository, private val context: Context) : ViewModel() {
+class CatViewModel(private val apiRepository: CatPhotosRepository, private val roomRepository: CatPhotosRepository, private val context: Context) : ViewModel() {
 
     private var networkImageProvider: CatImageProvider = CatImageProvider(5) { viewModelScope.launch { getNewPhotos() } }
     private var localImages: List<CatPhoto> = listOf()
@@ -116,7 +116,7 @@ class HomeViewModel(private val apiRepository: CatPhotosRepository, private val 
                 val apiRepository = application.container.apiRepository
                 val roomRepository = application.container.roomRepository
 
-                HomeViewModel(apiRepository, roomRepository, application.applicationContext)
+                CatViewModel(apiRepository, roomRepository, application.applicationContext)
             }
         }
     }

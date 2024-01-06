@@ -18,7 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.examenopdracht.onlycats.R
-import com.examenopdracht.onlycats.model.HomeViewModel
+import com.examenopdracht.onlycats.model.CatViewModel
 import com.examenopdracht.onlycats.ui.components.NavComponent
 import com.examenopdracht.onlycats.ui.screens.FavouritesScreen
 import com.examenopdracht.onlycats.ui.screens.HomeScreen
@@ -34,7 +34,7 @@ enum class CatScreen(@StringRes val title: Int) {
 @Composable
 fun OnlyCatsApp(
     navController: NavHostController = rememberNavController(),
-    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
+    viewModel: CatViewModel = viewModel(factory = CatViewModel.Factory),
     windowSizeClass: WindowSizeClass
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
