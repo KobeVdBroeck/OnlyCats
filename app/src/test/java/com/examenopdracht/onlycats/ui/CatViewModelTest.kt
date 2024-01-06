@@ -21,8 +21,7 @@ class CatViewModelTest {
 
     @Before
     fun setup() {
-        val application = Robolectric.buildActivity(FakeActivity::class.java).create().get()
-        var context = application.applicationContext
+        var context = Robolectric.buildActivity(FakeActivity::class.java).create().get().applicationContext
 
         viewModel = CatViewModel(
             apiRepository = FakeRepository(),
