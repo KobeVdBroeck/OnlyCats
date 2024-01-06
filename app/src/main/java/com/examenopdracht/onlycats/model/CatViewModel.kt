@@ -4,8 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Environment
+import android.util.Log
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +28,9 @@ import com.examenopdracht.onlycats.ui.OnlyCatsApplication
 import com.examenopdracht.onlycats.ui.components.CatImageProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 
 class CatViewModel(private val apiRepository: CatPhotosRepository, private val roomRepository: CatPhotosRepository, private val context: Context) : ViewModel() {
@@ -67,6 +74,29 @@ class CatViewModel(private val apiRepository: CatPhotosRepository, private val r
         }
     }
 
+    private suspend fun getFavourites() {
+        localUiState.value = LocalUiState.Loading
+
+        try {
+            val photos = roomRepository.getCatPhotos(10)
+
+            photos.forEach {
+                    it.photo = convertToBitmap(Uri.parse(it.url), context, it.width, it.height)
+                    it.onImageLoaded()
+                    it.isSaved = true
+                    it.save = { downloadPhoto("${it.id}.jpg", it.image!!.asAndroidBitmap(), context) }
+                    it.unsave = { deletePhoto(it) }
+            }
+
+            localImages = photos
+            localUiState.value = LocalUiState.Success(photos)
+
+        } catch(ex: Exception) {
+            localUiState.value = LocalUiState.Error
+            ex.printStackTrace()
+        }
+    }
+
     private fun savePhoto(photo: CatPhoto) {
         if(photo.dbId == 0)
             photo.dbId = null
@@ -86,26 +116,25 @@ class CatViewModel(private val apiRepository: CatPhotosRepository, private val r
         }
     }
 
-    private suspend fun getFavourites() {
-        localUiState.value = LocalUiState.Loading
+    private fun downloadPhoto(fileName: String, bitmap: Bitmap, context: Context) {
+        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
 
+        if(file.exists())
+            throw FileAlreadyExistsException(file)
+
+        val os: OutputStream
         try {
-            val photos = roomRepository.getCatPhotos(10)
+            os = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+            os.flush()
+            os.close()
 
-            photos.forEach {
-                    it.photo = convertToBitmap(Uri.parse(it.url), context, it.width, it.height)
-                    it.onImageLoaded()
-                    it.isSaved = true
-                    it.save = { savePhoto(it) }
-                    it.unsave = { deletePhoto(it) }
-            }
-
-            localImages = photos
-            localUiState.value = LocalUiState.Success(photos)
-
-        } catch(ex: Exception) {
-            localUiState.value = LocalUiState.Error
-            ex.printStackTrace()
+            MediaScannerConnection.scanFile(
+                context, arrayOf(file.toString()),
+                null, null
+            )
+        } catch (e: Exception) {
+            Log.e(javaClass.simpleName, "Error writing bitmap", e)
         }
     }
 

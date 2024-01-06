@@ -53,26 +53,43 @@ fun FavouritesScreen(photos: List<CatPhoto>, windowSizeClass: WindowSizeClass) {
     val width = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx().toInt()}
     val context = LocalContext.current
 
-    // TODO download on hold?
-
     fun handleTap(offset: Offset) {
-        if(offset.x < width / 5 || offset.x > width * 4 / 5)
-            selectedImage.value = CatPhoto.Empty()
+        val index = photos.indexOf(selectedImage.value)
+
+        if(offset.x < width / 5) {
+            if(index == 0)
+                return
+
+            selectedImage.value = photos[photos.indexOf(selectedImage.value) - 1]
+        }
+        else if(offset.x > width * 4 / 5) {
+            if(index == (photos.count() - 1))
+                return
+
+            selectedImage.value = photos[photos.indexOf(selectedImage.value) + 1]
+        }
+
+        else selectedImage.value = CatPhoto.Empty()
     }
 
     fun handleDoubleTap(offset: Offset) {
         if(offset.x < width / 5 || offset.x > width * 4 / 5)
             return
 
-        println(selectedImage.value.isSaved)
+        selectedImage.value.unsave()
+        Toast.makeText(context, "Image removed from favourites.", Toast.LENGTH_SHORT).show()
+    }
 
-        if(selectedImage.value.isSaved) {
-            selectedImage.value.unsave()
-            Toast.makeText(context, "Image removed from favourites.", Toast.LENGTH_SHORT).show()
-        }
-        else {
+    fun handleHold(offset: Offset) {
+        if(offset.x < width / 5 || offset.x > width * 4 / 5)
+            return
+
+        try {
             selectedImage.value.save()
-            Toast.makeText(context, "Image added to favourites.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Image downloaded.", Toast.LENGTH_SHORT).show()
+        }
+        catch(ex: FileAlreadyExistsException) {
+            Toast.makeText(context, "Image is already downloaded.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -84,11 +101,12 @@ fun FavouritesScreen(photos: List<CatPhoto>, windowSizeClass: WindowSizeClass) {
             modifier = Modifier.pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { offset -> handleTap(offset) },
-                    onDoubleTap = { offset -> handleDoubleTap(offset) }
+                    onDoubleTap = { offset -> handleDoubleTap(offset) },
+                    onLongPress = { offset -> handleHold(offset) }
                 )
             }
         ) {
-            CatView(image = selectedImage!!)
+            CatView(selectedImage!!)
         }
     }
 }

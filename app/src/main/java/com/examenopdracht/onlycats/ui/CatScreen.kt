@@ -57,7 +57,7 @@ fun OnlyCatsApp(
             navController = navController,
             startDestination = CatScreen.Home.name,
             modifier = Modifier.padding(start = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) 0.dp else 85.dp,
-                                        bottom = if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) 0.dp else 85.dp)) {
+                                        bottom = if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) 0.dp else 50.dp)) {
             composable(route = CatScreen.Home.name) {
                 HomeScreen(networkUiState, windowSizeClass)
             }

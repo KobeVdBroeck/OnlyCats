@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.examenopdracht.onlycats.network.CatPhoto
 import com.examenopdracht.onlycats.ui.screens.LoadingScreen
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CatView(image: MutableState<CatPhoto>) {
     if(image.value.image == null) {
@@ -16,4 +18,6 @@ fun CatView(image: MutableState<CatPhoto>) {
     else {
         Image(image.value.image!!, "Cat", modifier = Modifier.fillMaxSize())
     }
+
+
 }

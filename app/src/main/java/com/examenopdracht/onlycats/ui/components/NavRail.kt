@@ -14,12 +14,12 @@ import com.examenopdracht.onlycats.ui.CatScreen
 fun NavRail(currentScreen: CatScreen, navigateTo: (screenName: String) -> Unit) {
     NavigationRail {
         NavigationRailItem(onClick = { navigateTo(CatScreen.Home.name) }, selected = currentScreen == CatScreen.Home,
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home icon") })
+            icon = { Icon(Icons.Filled.Home, contentDescription = "NavRail home icon") })
 
         NavigationRailItem(onClick = { navigateTo(CatScreen.Favourites.name) }, selected = currentScreen == CatScreen.Favourites,
-            icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favourites icon") })
+            icon = { Icon(Icons.Filled.Favorite, contentDescription = "NavRail favourites icon") })
 
         NavigationRailItem(onClick = { navigateTo(CatScreen.Settings.name) }, selected = currentScreen == CatScreen.Settings,
-            icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings icon") })
+            icon = { Icon(Icons.Filled.Settings, contentDescription = "NavRail settings icon") })
     }
 }

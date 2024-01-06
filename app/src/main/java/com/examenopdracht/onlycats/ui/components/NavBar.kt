@@ -19,13 +19,13 @@ fun NavBar(
 ) {
         NavigationBar {
             NavigationBarItem(onClick = { navigateTo(CatScreen.Home.name) }, selected = currentScreen == CatScreen.Home,
-                icon = { Icon(Icons.Filled.Home, contentDescription = "Home icon") })
+                icon = { Icon(Icons.Filled.Home, contentDescription = "NavBar home icon") })
 
             NavigationBarItem(onClick = { navigateTo(CatScreen.Favourites.name) }, selected = currentScreen == CatScreen.Favourites,
-                icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favourites icon") })
+                icon = { Icon(Icons.Filled.Favorite, contentDescription = "NavBar favourites icon") })
 
             NavigationBarItem(onClick = { navigateTo(CatScreen.Settings.name) }, selected = currentScreen == CatScreen.Settings,
-                icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings icon") })
+                icon = { Icon(Icons.Filled.Settings, contentDescription = "NavBar settings icon") })
         }
 }
 
