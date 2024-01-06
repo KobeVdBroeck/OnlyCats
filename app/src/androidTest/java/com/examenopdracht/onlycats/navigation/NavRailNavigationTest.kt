@@ -1,4 +1,4 @@
-package com.examenopdracht.onlycats
+package com.examenopdracht.onlycats.navigation
 
 import android.content.Context
 import androidx.activity.ComponentActivity
@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
+import com.examenopdracht.onlycats.assertCurrentRoute
 import com.examenopdracht.onlycats.ui.CatScreen
 import com.examenopdracht.onlycats.ui.OnlyCatsApp
 import org.junit.Before
