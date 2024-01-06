@@ -21,7 +21,7 @@ class CatViewModelTest {
 
     @Before
     fun setup() {
-        var context = Robolectric.buildActivity(FakeActivity::class.java).create().get().applicationContext
+        val context = Robolectric.buildActivity(FakeActivity::class.java).create().get().applicationContext
 
         viewModel = CatViewModel(
             apiRepository = FakeRepository(),
@@ -31,7 +31,7 @@ class CatViewModelTest {
 
     @Test
     fun catViewModel_Initialized_ApiImagesLoaded() {
-        var state: NetworkUiState = viewModel.networkUiState.value
+        val state: NetworkUiState = viewModel.networkUiState.value
 
         assertEquals(state::class, NetworkUiState.Success::class)
 
@@ -41,7 +41,7 @@ class CatViewModelTest {
 
     @Test
     fun catViewModel_Initialized_LocalImagesLoaded() {
-        var state: LocalUiState = viewModel.localUiState.value
+        val state: LocalUiState = viewModel.localUiState.value
 
         assertEquals(state::class, LocalUiState.Success::class)
 
@@ -50,17 +50,17 @@ class CatViewModelTest {
 
     @Test
     fun catViewModel_ImageLimitReached_MoreImagesFetched() {
-        for(i in 0..amountToFetch - 1)
+        for(i in 1..amountToFetch)
             ((viewModel.networkUiState.value) as NetworkUiState.Success).imageProvider.getNext()
 
-        var curPhoto = ((viewModel.networkUiState.value) as NetworkUiState.Success).imageProvider.selectedPhoto
+        val curPhoto = ((viewModel.networkUiState.value) as NetworkUiState.Success).imageProvider.selectedPhoto
 
         assertTrue(curPhoto.value.dbId == 1)
     }
 
     @Test
     fun catViewModel_SaveImage_SavesImage() {
-        var photo = (viewModel.networkUiState.value as NetworkUiState.Success).imageProvider.selectedPhoto.value
+        val photo = (viewModel.networkUiState.value as NetworkUiState.Success).imageProvider.selectedPhoto.value
 
         photo.save()
 
@@ -69,7 +69,7 @@ class CatViewModelTest {
 
     @Test
     fun catViewModel_DeleteImage_DeletesImage() {
-        var photo = (viewModel.localUiState.value as LocalUiState.Success).photos.first()
+        val photo = (viewModel.localUiState.value as LocalUiState.Success).photos.first()
 
         photo.unsave()
 

@@ -1,6 +1,5 @@
 package com.examenopdracht.onlycats.ui.screens
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,23 +31,20 @@ import com.examenopdracht.onlycats.data.db.LocalUiState
 import com.examenopdracht.onlycats.network.CatPhoto
 import com.examenopdracht.onlycats.ui.components.CatView
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun FavouritesScreen(
     state: LocalUiState,
-    windowSizeClass: WindowSizeClass,
-    modifier: Modifier = Modifier,
 ) {
     when (state) {
-        is LocalUiState.Success -> FavouritesScreen(state.photos, windowSizeClass)
+        is LocalUiState.Success -> FavouritesScreen(state.photos)
         is LocalUiState.Loading -> LoadingScreen()
         is LocalUiState.Error -> ErrorScreen()
     }
 }
 
 @Composable
-fun FavouritesScreen(photos: List<CatPhoto>, windowSizeClass: WindowSizeClass) {
-    var selectedImage = remember { mutableStateOf(CatPhoto.Empty()) }
+fun FavouritesScreen(photos: List<CatPhoto>) {
+    val selectedImage = remember { mutableStateOf(CatPhoto.empty()) }
     val width = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx().toInt()}
     val context = LocalContext.current
 
@@ -69,7 +64,7 @@ fun FavouritesScreen(photos: List<CatPhoto>, windowSizeClass: WindowSizeClass) {
             selectedImage.value = photos[photos.indexOf(selectedImage.value) + 1]
         }
 
-        else selectedImage.value = CatPhoto.Empty()
+        else selectedImage.value = CatPhoto.empty()
     }
 
     fun handleDoubleTap(offset: Offset) {
@@ -106,7 +101,7 @@ fun FavouritesScreen(photos: List<CatPhoto>, windowSizeClass: WindowSizeClass) {
                 )
             }
         ) {
-            CatView(selectedImage!!)
+            CatView(selectedImage)
         }
     }
 }
@@ -137,7 +132,7 @@ fun GridItem(photo: CatPhoto, onImageClick: (image: CatPhoto) -> Unit) {
             .aspectRatio(1f)
     ) {
 
-        var imageLoaded = remember { mutableStateOf(photo.image != null) }
+        val imageLoaded = remember { mutableStateOf(photo.image != null) }
 
         if(!imageLoaded.value) {
             photo.onImageLoaded = { imageLoaded.value = true }

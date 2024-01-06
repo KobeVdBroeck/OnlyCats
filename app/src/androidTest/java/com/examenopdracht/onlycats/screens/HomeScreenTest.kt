@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
+import com.examenopdracht.onlycats.mock.FakeCatViewModel
 import com.examenopdracht.onlycats.ui.OnlyCatsApp
 import org.junit.Before
 import org.junit.Rule
@@ -32,14 +33,14 @@ class HomeScreenTest {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     @Before
     fun setup() {
-        var context = ApplicationProvider.getApplicationContext<Context>()
+        val context = ApplicationProvider.getApplicationContext<Context>()
         var navController: TestNavHostController
 
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
-            OnlyCatsApp(navController = navController, windowSizeClass = WindowSizeClass.calculateFromSize(
+            OnlyCatsApp(navController = navController, viewModel = FakeCatViewModel(context), windowSizeClass = WindowSizeClass.calculateFromSize(
                 DpSize(500.dp, 1000.dp)
             ))
         }

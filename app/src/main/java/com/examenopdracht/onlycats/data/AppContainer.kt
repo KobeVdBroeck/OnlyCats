@@ -20,12 +20,14 @@ interface AppContainer {
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
 
-    private val BASE_URL = "https://api.thecatapi.com/v1/"
+    private val baseUrl = "https://api.thecatapi.com/v1/"
+
+    private val json = Json { ignoreUnknownKeys = true }
 
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(BASE_URL)
-        .client(initHttpClient().build())
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(baseUrl)
+        .client(OkHttpClient.Builder().build())
         .build()
 
     private val retrofitService: CatApiService by lazy {
@@ -39,14 +41,4 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
     override val roomRepository: CatPhotosRepository by lazy {
         OfflineCatPhotosRepository(CatDatabase.getInstance(context).catDao)
     }
-}
-
-private fun initHttpClient(): OkHttpClient.Builder {
-    //val logging = HttpLoggingInterceptor()
-    //logging.level = HttpLoggingInterceptor.Level.BODY
-
-    val httpClient = OkHttpClient.Builder()
-    //httpClient.addInterceptor(logging)
-
-    return httpClient
 }

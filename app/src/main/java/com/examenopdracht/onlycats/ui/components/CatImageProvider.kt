@@ -10,10 +10,9 @@ class CatImageProvider(limit: Int, var onListsSwapped: () -> Unit) {
     private var currentIndex = 0
     private var currentPhotos = photos1
 
-    var selectedPhoto = mutableStateOf(CatPhoto.Empty())
+    var selectedPhoto = mutableStateOf(CatPhoto.empty())
 
-    var limit: Int
-        private set
+    private var limit: Int
 
 
     init {
@@ -43,7 +42,7 @@ class CatImageProvider(limit: Int, var onListsSwapped: () -> Unit) {
     }
 
     fun addNewPhotos(list: List<CatPhoto>) {
-        var listToAddTo: List<CatPhoto>
+        val listToAddTo: List<CatPhoto>
 
         if (photos1.isEmpty()) {
             listToAddTo = photos1

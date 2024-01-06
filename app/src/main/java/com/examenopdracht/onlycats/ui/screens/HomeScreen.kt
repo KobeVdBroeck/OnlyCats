@@ -2,7 +2,6 @@ package com.examenopdracht.onlycats.ui.screens
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,8 +32,7 @@ import com.examenopdracht.onlycats.ui.components.CatView
 @Composable
 fun HomeScreen (
     catUiState: NetworkUiState,
-    windowSizeClass: WindowSizeClass,
-    modifier: Modifier = Modifier,
+    windowSizeClass: WindowSizeClass
 ) {
     when (catUiState) {
         is NetworkUiState.Success -> ResultScreen(
@@ -75,7 +73,7 @@ fun ResultScreen(imageProvider: CatImageProvider, curImage: MutableState<CatPhot
             }
         }
 
-        Box() {
+        Box {
             Text("Welcome to OnlyCats!",
                 fontSize = TextUnit(10f, TextUnitType.Em),
                 textAlign = TextAlign.Center,
@@ -90,7 +88,6 @@ fun ResultScreen(imageProvider: CatImageProvider, curImage: MutableState<CatPhot
         }
     }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CatListView(photo: MutableState<CatPhoto>, onTap: (Offset) -> Unit, onDoubleTap: (Offset) -> Unit, windowSizeClass: WindowSizeClass) {
     Box(

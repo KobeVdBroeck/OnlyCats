@@ -42,15 +42,16 @@ abstract class CatDatabase: RoomDatabase() {
     }
 }
 
-public class ImageConverter {
+class ImageConverter {
     @TypeConverter
     fun fromImageBitmap(bitmap: ImageBitmap): ByteArray {
         var currentQuality = 100
         var currentBytes: Int = -1
-        val sizeLimit: Int = 10 * 1024 * 1024 // TODO get from config
+        val sizeLimit: Int = 1 * 1024 * 1024
 
         var outputStream = ByteArrayOutputStream()
 
+        // While image is larger than sizeLimit
         while(currentBytes < 0 || currentBytes > sizeLimit / 8) {
             outputStream = ByteArrayOutputStream()
             bitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.JPEG, currentQuality, outputStream)

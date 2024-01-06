@@ -54,13 +54,17 @@ data class CatPhoto (
         if(other == null || other::class.simpleName != CatPhoto::class.simpleName)
             return false
 
-        var otherPhoto = other as CatPhoto
+        val otherPhoto = other as CatPhoto
 
-        return this.url.equals(other.url) && (this.image == null) == (other.image == null)
+        return this.url == otherPhoto.url && (this.image == null) == (otherPhoto.image == null)
+    }
+
+    override fun hashCode(): Int {
+        return this.url.hashCode()
     }
 
     companion object Factory {
-        fun Empty(): CatPhoto {
+        fun empty(): CatPhoto {
             return CatPhoto(0, "", "", 0, 0)
         }
     }

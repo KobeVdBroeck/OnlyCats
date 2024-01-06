@@ -1,14 +1,14 @@
 package com.examenopdracht.onlycats.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import com.examenopdracht.onlycats.ui.CatScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NavComponent(
     currentScreen: CatScreen,
@@ -24,10 +24,7 @@ fun NavComponent(
             }
         }
 
-    ) { paddingValues ->
-        // TODO
-        val koenk = paddingValues
-
+    ) {
         if(windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
             NavRail(currentScreen, navigateTo)
         }

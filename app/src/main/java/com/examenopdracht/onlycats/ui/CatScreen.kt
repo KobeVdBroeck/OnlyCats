@@ -1,8 +1,7 @@
 package com.examenopdracht.onlycats.ui
 
-import androidx.annotation.StringRes
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -17,20 +16,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.examenopdracht.onlycats.R
 import com.examenopdracht.onlycats.model.CatViewModel
 import com.examenopdracht.onlycats.ui.components.NavComponent
 import com.examenopdracht.onlycats.ui.screens.FavouritesScreen
 import com.examenopdracht.onlycats.ui.screens.HomeScreen
 import com.examenopdracht.onlycats.ui.screens.SettingsScreen
 
-enum class CatScreen(@StringRes val title: Int) {
-    Home(title = R.string.home),
-    Favourites(title = R.string.favourites),
-    Settings(title = R.string.settings),
+enum class CatScreen {
+    Home,
+    Favourites,
+    Settings,
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun OnlyCatsApp(
     navController: NavHostController = rememberNavController(),
@@ -44,14 +42,13 @@ fun OnlyCatsApp(
     )
 
 
-    Scaffold{ innerPadding ->
+    Scaffold{
 
         // TODO remove this
-        val koenk = innerPadding
         val networkUiState by viewModel.networkUiState.collectAsState()
         val localUiState by viewModel.localUiState.collectAsState()
 
-        NavComponent(currentScreen, { page -> GoToPage(navController, currentScreen, page) }, windowSizeClass)
+        NavComponent(currentScreen, { page -> goToPage(navController, currentScreen, page) }, windowSizeClass)
 
         NavHost(
             navController = navController,
@@ -63,7 +60,7 @@ fun OnlyCatsApp(
             }
 
             composable(route = CatScreen.Favourites.name) {
-                FavouritesScreen(localUiState, windowSizeClass)
+                FavouritesScreen(localUiState)
             }
 
             composable(route = CatScreen.Settings.name) {
@@ -75,7 +72,7 @@ fun OnlyCatsApp(
 
 }
 
-fun GoToPage(navController: NavHostController, currentScreen: CatScreen, screenName: String) {
+fun goToPage(navController: NavHostController, currentScreen: CatScreen, screenName: String) {
     if(currentScreen.name == screenName)
         return
 

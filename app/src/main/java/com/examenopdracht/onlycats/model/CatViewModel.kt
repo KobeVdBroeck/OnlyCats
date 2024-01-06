@@ -1,5 +1,6 @@
 package com.examenopdracht.onlycats.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -18,7 +19,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
 import coil.request.ImageRequest
 import com.examenopdracht.onlycats.data.CatPhotosRepository
 import com.examenopdracht.onlycats.data.api.NetworkUiState
@@ -32,18 +32,16 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-
-class CatViewModel(private val apiRepository: CatPhotosRepository, private val roomRepository: CatPhotosRepository, private val context: Context) : ViewModel() {
+@SuppressLint("StaticFieldLeak")
+class CatViewModel(private val apiRepository: CatPhotosRepository, private val roomRepository: CatPhotosRepository,  private val context: Context) : ViewModel() {
 
     private var networkImageProvider: CatImageProvider = CatImageProvider(5) { viewModelScope.launch { getNewPhotos() } }
     private var localImages: List<CatPhoto> = listOf()
 
     var networkUiState: MutableStateFlow<NetworkUiState> = MutableStateFlow(NetworkUiState.Loading)
-        public get
         private set
 
     var localUiState: MutableStateFlow<LocalUiState> = MutableStateFlow(LocalUiState.Loading)
-        public get
         private set
 
     init {
@@ -151,7 +149,6 @@ class CatViewModel(private val apiRepository: CatPhotosRepository, private val r
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 suspend fun getDrawable(uri: Uri, context: Context): Drawable? {
     val imageLoader = ImageLoader.Builder(context)
         .allowHardware(false)
@@ -164,7 +161,7 @@ suspend fun getDrawable(uri: Uri, context: Context): Drawable? {
     return imageLoader.execute(request).drawable
 }
 
-suspend fun convertToBitmap(uri: Uri, context: Context, widthPixels: Int, heightPixels: Int): ImageBitmap? {
+suspend fun convertToBitmap(uri: Uri, context: Context, widthPixels: Int, heightPixels: Int): ImageBitmap {
     val mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(mutableBitmap)
     val drawable = getDrawable(uri, context)

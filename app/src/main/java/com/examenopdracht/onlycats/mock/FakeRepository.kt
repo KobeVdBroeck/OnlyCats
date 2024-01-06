@@ -5,7 +5,7 @@ import com.examenopdracht.onlycats.network.CatPhoto
 
 class FakeRepository : CatPhotosRepository {
 
-    val dataSource = FakeDataSource()
+    private val dataSource = FakeDataSource()
 
     override suspend fun getCatPhotos(amount: Int): List<CatPhoto> {
         return dataSource.images
