@@ -3,7 +3,6 @@ package com.examenopdracht.onlycats.ui.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,9 +20,6 @@ fun NavBar(
 
             NavigationBarItem(onClick = { navigateTo(CatScreen.Favourites.name) }, selected = currentScreen == CatScreen.Favourites,
                 icon = { Icon(Icons.Filled.Favorite, contentDescription = "NavBar favourites icon") })
-
-            NavigationBarItem(onClick = { navigateTo(CatScreen.Settings.name) }, selected = currentScreen == CatScreen.Settings,
-                icon = { Icon(Icons.Filled.Settings, contentDescription = "NavBar settings icon") })
         }
 }
 

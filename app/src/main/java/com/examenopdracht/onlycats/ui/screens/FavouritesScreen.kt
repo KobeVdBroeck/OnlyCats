@@ -111,7 +111,8 @@ fun ImageGrid(photos: List<CatPhoto>, onImageClick: (image: CatPhoto) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.FixedSize(size = 128.dp),
         contentPadding = PaddingValues(4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.padding(bottom = 33.dp)
     ) {
         items(photos) { photo ->
             GridItem(photo = photo, onImageClick)

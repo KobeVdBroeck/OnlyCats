@@ -20,12 +20,10 @@ import com.examenopdracht.onlycats.model.CatViewModel
 import com.examenopdracht.onlycats.ui.components.NavComponent
 import com.examenopdracht.onlycats.ui.screens.FavouritesScreen
 import com.examenopdracht.onlycats.ui.screens.HomeScreen
-import com.examenopdracht.onlycats.ui.screens.SettingsScreen
 
 enum class CatScreen {
     Home,
     Favourites,
-    Settings,
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -41,10 +39,7 @@ fun OnlyCatsApp(
         backStackEntry?.destination?.route ?: CatScreen.Home.name
     )
 
-
     Scaffold{
-
-        // TODO remove this
         val networkUiState by viewModel.networkUiState.collectAsState()
         val localUiState by viewModel.localUiState.collectAsState()
 
@@ -62,14 +57,8 @@ fun OnlyCatsApp(
             composable(route = CatScreen.Favourites.name) {
                 FavouritesScreen(localUiState)
             }
-
-            composable(route = CatScreen.Settings.name) {
-                SettingsScreen()
-            }
         }
-
     }
-
 }
 
 fun goToPage(navController: NavHostController, currentScreen: CatScreen, screenName: String) {

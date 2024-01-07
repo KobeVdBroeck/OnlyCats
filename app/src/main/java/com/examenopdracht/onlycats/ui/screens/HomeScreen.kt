@@ -27,7 +27,6 @@ import com.examenopdracht.onlycats.network.CatPhoto
 import com.examenopdracht.onlycats.ui.components.CatImageProvider
 import com.examenopdracht.onlycats.ui.components.CatView
 
-// TODO app icon
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomeScreen (

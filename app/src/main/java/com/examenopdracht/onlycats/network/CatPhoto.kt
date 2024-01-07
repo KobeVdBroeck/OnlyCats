@@ -17,7 +17,6 @@ data class CatPhoto (
 
     val id: String,
 
-    // val breeds: Array<String>, TODO change type
     val url: String,
     val width: Int,
     val height: Int,
