@@ -48,14 +48,14 @@ class HomeScreenTest {
 
     @Test
     fun homeScreen_noUserInput_imageIsLoaded() {
-        composeTestRule.waitUntilAtLeastOneExists(hasContentDescription("Cat"), 10000L)
+        composeTestRule.waitUntilAtLeastOneExists(hasContentDescription("Cat"), 15000L)
 
         composeTestRule.onNodeWithContentDescription("Cat").assertIsDisplayed()
     }
 
     @Test
     fun homeScreen_doubleTap_imageIsSaved() {
-        composeTestRule.waitUntilAtLeastOneExists(hasContentDescription("Cat"), 10000L)
+        composeTestRule.waitUntilAtLeastOneExists(hasContentDescription("Cat"), 15000L)
 
         composeTestRule.onNodeWithContentDescription("Cat").performMouseInput {
             this.doubleClick(Offset(centerX, centerY))

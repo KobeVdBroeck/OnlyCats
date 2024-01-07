@@ -1,4 +1,4 @@
-package com.examenopdracht.onlycats.ui
+package com.examenopdracht.onlycats
 
 import com.examenopdracht.onlycats.data.api.NetworkUiState
 import com.examenopdracht.onlycats.data.db.LocalUiState

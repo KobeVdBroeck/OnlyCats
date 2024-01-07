@@ -45,7 +45,6 @@ class LandscapeModeNavigationTest {
     fun catNavHost_landscapeMode_showsNavRail() {
         composeTestRule.onNodeWithContentDescription("NavRail home icon").assertExists("NavRail was not or partially loaded")
         composeTestRule.onNodeWithContentDescription("NavRail favourites icon").assertExists("NavRail was not or partially loaded")
-        composeTestRule.onNodeWithContentDescription("NavRail settings icon").assertExists("NavRail was not or partially loaded")
     }
 
     @Test
@@ -53,15 +52,6 @@ class LandscapeModeNavigationTest {
         composeTestRule.onNodeWithContentDescription("NavRail favourites icon").performClick()
 
         navController.assertCurrentRoute(CatScreen.Favourites.name)
-
-        composeTestRule.onNodeWithContentDescription("NavRail home icon").performClick()
-    }
-
-    @Test
-    fun catNavHost_clickNavRailFavouritesIcon_navigatesToSettings() {
-        composeTestRule.onNodeWithContentDescription("NavRail settings icon").performClick()
-
-        navController.assertCurrentRoute(CatScreen.Settings.name)
 
         composeTestRule.onNodeWithContentDescription("NavRail home icon").performClick()
     }

@@ -16,6 +16,4 @@ fun CatView(image: MutableState<CatPhoto>) {
     else {
         Image(image.value.image!!, "Cat", modifier = Modifier.fillMaxSize())
     }
-
-
 }

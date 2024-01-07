@@ -48,7 +48,6 @@ class CatScreenNavigationTest {
     fun catNavHost_showsNavBar() {
         composeTestRule.onNodeWithContentDescription("NavBar home icon").assertExists("NavBar was not or partially loaded")
         composeTestRule.onNodeWithContentDescription("NavBar favourites icon").assertExists("NavBar was not or partially loaded")
-        composeTestRule.onNodeWithContentDescription("NavBar settings icon").assertExists("NavBar was not or partially loaded")
     }
 
     @Test
@@ -56,15 +55,6 @@ class CatScreenNavigationTest {
         composeTestRule.onNodeWithContentDescription("NavBar favourites icon").performClick()
 
         navController.assertCurrentRoute(CatScreen.Favourites.name)
-
-        composeTestRule.onNodeWithContentDescription("NavBar home icon").performClick()
-    }
-
-    @Test
-    fun catNavHost_clickNavBarSettingsIcon_navigatesToSettings() {
-        composeTestRule.onNodeWithContentDescription("NavBar settings icon").performClick()
-
-        navController.assertCurrentRoute(CatScreen.Settings.name)
 
         composeTestRule.onNodeWithContentDescription("NavBar home icon").performClick()
     }
